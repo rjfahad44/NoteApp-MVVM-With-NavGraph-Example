@@ -89,4 +89,5 @@ dependencies {
 
     //color picker
     //implementation "com.github.duanhong169:colorpicker:1.1.6"
+    implementation "com.github.skydoves:colorpickerview:2.2.4"
 }

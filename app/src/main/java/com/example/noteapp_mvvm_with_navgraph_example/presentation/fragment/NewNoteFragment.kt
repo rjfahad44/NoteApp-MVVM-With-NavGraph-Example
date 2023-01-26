@@ -6,14 +6,14 @@ import android.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.noteapp_mvvm_with_navgraph_example.R
-import com.example.noteapp_mvvm_with_navgraph_example.data.adapter.NoteAdapter
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentNewNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
 import com.example.noteapp_mvvm_with_navgraph_example.utils.snackBar
 import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
-import com.google.android.material.snackbar.Snackbar
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -34,24 +34,20 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
             chooseColorMcvBtn.setCardBackgroundColor(selectedColor)
             chooseColorMcvBtn.setOnClickListener {
 
-//                ColorPickerPopup.Builder(activity).initialColor(selectedColor)
-//                    .enableBrightness(true)
-//                    .enableAlpha(true)
-//                    .okTitle("Choose")
-//                    .cancelTitle("Cancel")
-//                    .showIndicator(true)
-//                    .showValue(true)
-//                    .build()
-//                    .show(it, object : ColorPickerObserver() {
-//                        override fun onColorPicked(color: Int) {
-//
-//                            selectedColor = color
-//                            Log.d("COLOR", "Color : $selectedColor")
-//
-//                            chooseColorMcvBtn.setCardBackgroundColor(color)
-//                            cardView.setCardBackgroundColor(color)
-//                        }
-//                    })
+                ColorPickerDialog.Builder(activity)
+                    .setTitle("ColorPicker Dialog")
+                    .setPreferenceName("MyColorPickerDialog")
+                    .setPositiveButton(getString(R.string.confirm),
+                        ColorEnvelopeListener { envelope, fromUser ->
+                            chooseColorMcvBtn.setCardBackgroundColor(envelope.color)
+                            cardView.setCardBackgroundColor(envelope.color)
+                            selectedColor = envelope.color
+                        })
+                    .setNegativeButton(getString(R.string.cancel)) { dialogInterface, i -> dialogInterface.dismiss() }
+                    .attachAlphaSlideBar(true)
+                    .attachBrightnessSlideBar(true)
+                    .setBottomSpace(12)
+                    .show()
             }
 
         }
@@ -61,7 +57,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         val noteTitle = binding?.etNoteTitle?.text.toString().trim()
         val noteBody = binding?.etNoteBody?.text.toString().trim()
 
-        if (noteTitle.isNotEmpty()) {
+        if (noteTitle.isNotEmpty() && noteBody.isNotEmpty()) {
             val note = Note(0, noteTitle, noteBody, selectedColor)
 
             notesViewModel.addNote(note)
@@ -70,9 +66,8 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
 
             binding?.root?.let { "Note saved successfully".snackBar(it) }
 
-
         } else {
-            "Please enter note title".toast(requireActivity())
+            "Empty Note".toast(requireActivity())
         }
     }
 

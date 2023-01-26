@@ -13,6 +13,8 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewMod
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
 import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -42,26 +44,20 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             etNoteTitleUpdate.setText(currentNote.noteTitle)
             chooseColorMcvBtn.setCardBackgroundColor(currentNote.noteColor)
 
-            /*chooseColorMcvBtn.setOnClickListener {
-                ColorPickerPopup.Builder(activity).initialColor(selectedColor)
-                    .enableBrightness(true)
-                    .enableAlpha(true)
-                    .okTitle("Choose")
-                    .cancelTitle("Cancel")
-                    .showIndicator(true)
-                    .showValue(true)
-                    .build()
-                    .show(it, object : ColorPickerPopup.ColorPickerObserver() {
-                        override fun onColorPicked(color: Int) {
-
-                            selectedColor = color
-                            Log.d("COLOR", "Color : $selectedColor")
-
-                            chooseColorMcvBtn.setCardBackgroundColor(color)
-                            cardView.setCardBackgroundColor(color)
-                        }
+            ColorPickerDialog.Builder(activity)
+                .setTitle("ColorPicker Dialog")
+                .setPreferenceName("MyColorPickerDialog")
+                .setPositiveButton(getString(R.string.confirm),
+                    ColorEnvelopeListener { envelope, fromUser ->
+                        chooseColorMcvBtn.setCardBackgroundColor(envelope.color)
+                        cardView.setCardBackgroundColor(envelope.color)
+                        currentNote.noteColor = envelope.color
                     })
-            }*/
+                .setNegativeButton(getString(R.string.cancel)) { dialogInterface, i -> dialogInterface.dismiss() }
+                .attachAlphaSlideBar(true)
+                .attachBrightnessSlideBar(true)
+                .setBottomSpace(12)
+                .show()
 
         }
 
@@ -69,14 +65,15 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             val title = binding?.etNoteTitleUpdate?.text.toString().trim()
             val body = binding?.etNoteBodyUpdate?.text.toString().trim()
 
-            if (title.isNotEmpty()) {
-                val note = Note(currentNote.id, title, body, selectedColor)
-                notesViewModel.updateNote(note)
+            if (title.isNotEmpty() && body.isNotEmpty()) {
+                currentNote.noteTitle = title
+                currentNote.noteBody = body
+                notesViewModel.updateNote(currentNote)
 
                 findNavController().popBackStack()
 
             } else {
-                activity?.toast("Enter a note title please")
+                activity?.toast("Field is empty!")
             }
         }
     }

@@ -40,8 +40,16 @@ fun Context.toast(message: String){
     Toast.makeText(this, message , Toast.LENGTH_SHORT).show()
 }
 
-fun String.log(key: String = "LOG") {
+fun String.logE(key: String = "LOG") {
     Log.e(key, this)
+}
+
+fun String.logD(key: String = "LOG") {
+    Log.d(key, this)
+}
+
+fun String.logI(key: String = "LOG") {
+    Log.i(key, this)
 }
 
 fun String.toast(context: Context, show: Int = Toast.LENGTH_SHORT) {
