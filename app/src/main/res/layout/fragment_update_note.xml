@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_white"
+    android:background="@drawable/app_bg_gradient_color"
     tools:context=".presentation.fragment.UpdateNoteFragment">
 
     <LinearLayout
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +25,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/white"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp">
 
@@ -49,7 +49,7 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:ems="10"
-                        android:hint="Type your title"
+                        android:hint="@string/note_title"
                         android:inputType="text"
                         android:textColor="@color/black"
                         android:textColorHint="@color/hintColor"
@@ -80,13 +80,13 @@
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:gravity="start|top"
-                    android:hint="Type something..."
+                    android:hint="@string/type_something"
                     android:inputType="textMultiLine"
                     android:textColor="@color/black"
                     android:textColorHint="@color/hintColor"
                     android:textSize="16sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
@@ -98,11 +98,12 @@
         android:layout_marginBottom="32dp"
         android:clickable="true"
         app:borderWidth="0dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/update_note_fab_color"
         android:tintMode="@color/white"
         android:src="@drawable/ic_done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/todo"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

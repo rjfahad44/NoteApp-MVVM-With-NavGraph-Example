@@ -3,4 +3,9 @@
     <string name="bersyte">bersyte</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="note_title">Note title</string>
+    <string name="type_something">Type something...</string>
+    <string name="todo">TODO</string>
+    <string name="no_notes_available">No notes available!!!</string>
+    <string name="save">Save</string>
 </resources>

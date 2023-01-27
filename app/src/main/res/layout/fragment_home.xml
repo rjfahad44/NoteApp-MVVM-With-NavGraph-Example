@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="8dp"
     android:id="@+id/home_frag"
-    android:background="@color/background_white"
+    android:background="@drawable/app_bg_gradient_color"
     tools:context=".presentation.fragment.HomeFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/add_note_fab_color"
         android:clickable="true"
         android:tintMode="@color/white"
         app:borderWidth="0dp"
@@ -23,7 +23,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/todo"
+        android:focusable="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -56,7 +57,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="50dp"
-            android:text="No notes available!!!"
+            android:text="@string/no_notes_available"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
