@@ -26,15 +26,11 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
     private val args: UpdateNoteFragmentArgs by navArgs()
     private lateinit var currentNote: Note
 
-    private var selectedColor = 0
-
     override fun setBinding(): FragmentUpdateNoteBinding =
         FragmentUpdateNoteBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        UpdateNoteFragmentArgs
 
         currentNote = args.note!!
 
@@ -44,20 +40,23 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             etNoteTitleUpdate.setText(currentNote.noteTitle)
             chooseColorMcvBtn.setCardBackgroundColor(currentNote.noteColor)
 
-            ColorPickerDialog.Builder(activity)
-                .setTitle("ColorPicker Dialog")
-                .setPreferenceName("MyColorPickerDialog")
-                .setPositiveButton(getString(R.string.confirm),
-                    ColorEnvelopeListener { envelope, fromUser ->
-                        chooseColorMcvBtn.setCardBackgroundColor(envelope.color)
-                        cardView.setCardBackgroundColor(envelope.color)
-                        currentNote.noteColor = envelope.color
-                    })
-                .setNegativeButton(getString(R.string.cancel)) { dialogInterface, i -> dialogInterface.dismiss() }
-                .attachAlphaSlideBar(true)
-                .attachBrightnessSlideBar(true)
-                .setBottomSpace(12)
-                .show()
+            chooseColorMcvBtn.setOnClickListener {
+
+                ColorPickerDialog.Builder(activity)
+                    .setTitle("ColorPicker Dialog")
+                    .setPreferenceName("MyColorPickerDialog")
+                    .setPositiveButton(getString(R.string.confirm),
+                        ColorEnvelopeListener { envelope, fromUser ->
+                            chooseColorMcvBtn.setCardBackgroundColor(envelope.color)
+                            cardView.setCardBackgroundColor(envelope.color)
+                            currentNote.noteColor = envelope.color
+                        })
+                    .setNegativeButton(getString(R.string.cancel)) { dialogInterface, i -> dialogInterface.dismiss() }
+                    .attachAlphaSlideBar(true)
+                    .attachBrightnessSlideBar(true)
+                    .setBottomSpace(12)
+                    .show()
+            }
 
         }
 
