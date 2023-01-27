@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/cardView"
-    app:cardBackgroundColor="@color/white"
-    app:cardUseCompatPadding="true"
-    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/background_white"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="3dp"
     android:elevation="3dp">
 

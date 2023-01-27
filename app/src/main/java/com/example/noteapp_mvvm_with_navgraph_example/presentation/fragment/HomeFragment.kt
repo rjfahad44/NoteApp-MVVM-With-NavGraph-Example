@@ -4,7 +4,10 @@ package com.example.noteapp_mvvm_with_navgraph_example.presentation.fragment
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp_mvvm_with_navgraph_example.R
@@ -29,6 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupMenu()
         setUpRecyclerView()
 
         binding?.fabAddNote?.setOnClickListener {
@@ -67,16 +71,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.home_menu, menu)
-        val mMenuSearch = menu.findItem(R.id.menu_search).actionView as SearchView
-        mMenuSearch.isSubmitButtonEnabled = false
-        mMenuSearch.setOnQueryTextListener(this)
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // Handle for example visibility of menu items
+                val mMenuSearch = menu.findItem(R.id.menu_search).actionView as SearchView
+                mMenuSearch.isSubmitButtonEnabled = false
+                mMenuSearch.setOnQueryTextListener(this@HomeFragment)
+            }
 
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.home_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Validate and handle the selected menu item
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         return false

@@ -3,7 +3,10 @@ package com.example.noteapp_mvvm_with_navgraph_example.presentation.fragment
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.noteapp_mvvm_with_navgraph_example.R
@@ -32,6 +35,8 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupMenu()
+
         currentNote = args.note!!
 
         binding?.apply {
@@ -48,7 +53,6 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                     .setPositiveButton(getString(R.string.confirm),
                         ColorEnvelopeListener { envelope, fromUser ->
                             chooseColorMcvBtn.setCardBackgroundColor(envelope.color)
-                            cardView.setCardBackgroundColor(envelope.color)
                             currentNote.noteColor = envelope.color
                         })
                     .setNegativeButton(getString(R.string.cancel)) { dialogInterface, i -> dialogInterface.dismiss() }
@@ -91,21 +95,26 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
 
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_update_note, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_delete -> {
-                deleteNote()
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // Handle for example visibility of menu items
             }
-        }
 
-        return super.onOptionsItemSelected(item)
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_update_note, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Validate and handle the selected menu item
+                when (menuItem.itemId) {
+                    R.id.menu_delete -> {
+                        deleteNote()
+                    }
+                }
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
 }
