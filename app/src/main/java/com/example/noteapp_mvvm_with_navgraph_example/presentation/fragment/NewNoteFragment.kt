@@ -14,6 +14,7 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentNewNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
+import com.example.noteapp_mvvm_with_navgraph_example.utils.dateTimeFormat
 import com.example.noteapp_mvvm_with_navgraph_example.utils.snackBar
 import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
 import com.skydoves.colorpickerview.ColorPickerDialog
@@ -37,6 +38,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         setupMenu()
 
         binding?.apply {
+            dateTime.text = "EEEE, dd-MMM-yyyy, hh:mm:ss a".dateTimeFormat()
             chooseColorMcvBtn.setCardBackgroundColor(selectedColor)
             chooseColorMcvBtn.setOnClickListener {
 
@@ -61,9 +63,10 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
     private fun saveNote() {
         val noteTitle = binding?.etNoteTitle?.text.toString().trim()
         val noteBody = binding?.etNoteBody?.text.toString().trim()
+        val currentDateTime = "EEEE, dd-MMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
         if (noteTitle.isNotEmpty() && noteBody.isNotEmpty()) {
-            val note = Note(0, noteTitle, noteBody, selectedColor)
+            val note = Note(0, noteTitle, noteBody, currentDateTime, currentDateTime, selectedColor)
 
             notesViewModel.addNote(note)
 

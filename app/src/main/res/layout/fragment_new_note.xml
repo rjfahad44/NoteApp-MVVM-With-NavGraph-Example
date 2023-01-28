@@ -57,8 +57,6 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     app:cardCornerRadius="50dp"
-                    app:strokeWidth="3dp"
-                    app:strokeColor="@color/white"
                     app:cardElevation="3dp"
                     android:elevation="3dp"
                     android:translationZ="3dp"
@@ -67,11 +65,20 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/date_and_time"
+                android:textColor="@color/note_body_txt_color"
+                android:textSize="12sp" />
+
             <EditText
                 android:id="@+id/etNoteBody"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
                 android:gravity="start|top"

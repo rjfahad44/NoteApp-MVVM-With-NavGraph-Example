@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_white">#EDE9E9</color>
     <color name="hintColor">#A8A8A8</color>
-    <color name="add_note_fab_color">#6CD570</color>
+    <color name="note_body_txt_color">#888888</color>
+    <color name="add_note_fab_color">#FF9800</color>
     <color name="update_note_fab_color">#FF8181</color>
 
 

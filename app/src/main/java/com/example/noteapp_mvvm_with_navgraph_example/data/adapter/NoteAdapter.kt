@@ -46,6 +46,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
         holder.itemBinding.tvNoteTitle.text = currentNote.noteTitle
         holder.itemBinding.tvNoteBody.text = currentNote.noteBody
+        holder.itemBinding.dateTime.text = currentNote.updatedAt
 
         //Generate Random Color//
         //val random = Random()
@@ -54,14 +55,10 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         holder.itemBinding.cardColor.setCardBackgroundColor(currentNote.noteColor)
 
         holder.itemView.setOnClickListener { view ->
-            val direction =
-                HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote)
-            view.findNavController().navigate(direction)
+            view.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote))
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
 }

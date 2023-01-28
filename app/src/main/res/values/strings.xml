@@ -8,4 +8,5 @@
     <string name="todo">TODO</string>
     <string name="no_notes_available">No notes available!!!</string>
     <string name="save">Save</string>
+    <string name="date_and_time">date and time</string>
 </resources>

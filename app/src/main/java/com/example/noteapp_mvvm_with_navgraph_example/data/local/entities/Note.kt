@@ -12,5 +12,7 @@ data class Note(
     val id: Int = 0,
     var noteTitle: String,
     var noteBody: String,
+    var createdAt: String?,
+    var updatedAt: String?,
     var noteColor: Int,
 ) : Parcelable

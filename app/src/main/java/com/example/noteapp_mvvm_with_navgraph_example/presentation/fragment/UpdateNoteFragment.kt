@@ -15,6 +15,7 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
+import com.example.noteapp_mvvm_with_navgraph_example.utils.dateTimeFormat
 import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -41,6 +42,7 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
 
         binding?.apply {
 
+            dateTime.text = currentNote.updatedAt
             etNoteBodyUpdate.setText(currentNote.noteBody)
             etNoteTitleUpdate.setText(currentNote.noteTitle)
             chooseColorMcvBtn.setCardBackgroundColor(currentNote.noteColor)
@@ -67,10 +69,12 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
         binding?.fabDone?.setOnClickListener {
             val title = binding?.etNoteTitleUpdate?.text.toString().trim()
             val body = binding?.etNoteBodyUpdate?.text.toString().trim()
+            val updateDateTime = "EEEE, dd-MMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
             if (title.isNotEmpty() && body.isNotEmpty()) {
                 currentNote.noteTitle = title
                 currentNote.noteBody = body
+                currentNote.updatedAt = updateDateTime
                 notesViewModel.updateNote(currentNote)
 
                 findNavController().popBackStack()
