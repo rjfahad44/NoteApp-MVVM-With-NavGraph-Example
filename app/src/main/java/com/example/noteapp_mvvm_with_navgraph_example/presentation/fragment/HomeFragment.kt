@@ -16,6 +16,8 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentHomeBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
+import com.example.noteapp_mvvm_with_navgraph_example.utils.getSortType
+import com.example.noteapp_mvvm_with_navgraph_example.utils.setSortType
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -58,7 +60,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
                 updateUI(note)
             }
         }
-
     }
 
     private fun updateUI(note: List<Note>) {
@@ -85,7 +86,54 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Validate and handle the selected menu item
+                getSortType(requireContext())?.let { menuItem.isChecked = true }
+                menuItem.itemId.setSortType(requireContext())
+                when (menuItem.itemId) {
+                    R.id.sort_default -> {
+                        activity?.let {
+                            notesViewModel.allNotes().observe(it) { note ->
+                                noteAdapter.differ.submitList(note)
+                                updateUI(note)
+                            }
+                        }
+                    }
+                    R.id.sort_ascending -> {
+                        activity?.let {
+                            notesViewModel.allNotes().observe(it) { notes ->
+                                val sortedNotes = notes.sortedBy { it.noteTitle }
+                                noteAdapter.differ.submitList(sortedNotes)
+                                updateUI(sortedNotes)
+                            }
+                        }
+                    }
+                    R.id.sort_descending -> {
+                        activity?.let {
+                            notesViewModel.allNotes().observe(it) { notes ->
+                                val sortedNotes = notes.sortedByDescending { it.noteTitle }
+                                noteAdapter.differ.submitList(sortedNotes)
+                                updateUI(sortedNotes)
+                            }
+                        }
+                    }
+                    R.id.sort_date_ascending -> {
+                        activity?.let {
+                            notesViewModel.allNotes().observe(it) { notes ->
+                                val sortedNotes = notes.sortedBy { it.updatedAt }
+                                noteAdapter.differ.submitList(sortedNotes)
+                                updateUI(sortedNotes)
+                            }
+                        }
+                    }
+                    R.id.sort_date_descending -> {
+                        activity?.let {
+                            notesViewModel.allNotes().observe(it) { notes ->
+                                val sortedNotes = notes.sortedByDescending { it.updatedAt }
+                                noteAdapter.differ.submitList(sortedNotes)
+                                updateUI(sortedNotes)
+                            }
+                        }
+                    }
+                }
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)

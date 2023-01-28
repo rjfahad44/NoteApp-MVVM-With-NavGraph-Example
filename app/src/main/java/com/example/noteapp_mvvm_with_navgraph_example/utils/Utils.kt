@@ -80,3 +80,12 @@ fun String.dateTimeFormat(): String{
         date
     }
 }
+
+fun Int.setSortType(context: Context){
+    val sp = context.getSharedPreferences("SORT_BTN_TYPE_SP", Context.MODE_PRIVATE)
+    sp.edit().putInt("SORT_BTN", this).apply()
+}
+fun getSortType(context: Context) : Int? {
+    val sp = context.getSharedPreferences("SORT_BTN_TYPE_SP", Context.MODE_PRIVATE)
+    return sp.getInt("SORT_BTN", -1)?:null
+}

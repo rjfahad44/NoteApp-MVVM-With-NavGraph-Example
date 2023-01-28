@@ -1,7 +1,7 @@
 package com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+
+import androidx.lifecycle.*
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.repo.NotesRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(private val notesRepo: NotesRepo) : ViewModel() {
-
     fun allNotes() = notesRepo.notes
 
     fun addNote(note: Note) = viewModelScope.launch {

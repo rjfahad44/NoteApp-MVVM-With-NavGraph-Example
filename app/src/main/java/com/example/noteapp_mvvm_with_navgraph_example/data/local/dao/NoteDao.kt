@@ -18,7 +18,7 @@ interface NoteDao {
     suspend fun deleteNote(note: Note)
 
     @Query("SELECT * FROM NOTES ORDER BY id DESC")
-    fun getAllNotes(): Flow<List<Note>>
+    fun getAllNotes(): LiveData<List<Note>>
 
     @Query("SELECT * FROM NOTES WHERE noteTitle LIKE :query OR noteBody LIKE:query")
     fun searchNote(query: String?): LiveData<List<Note>>

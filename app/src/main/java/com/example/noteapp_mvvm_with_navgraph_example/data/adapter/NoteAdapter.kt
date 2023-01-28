@@ -21,7 +21,8 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
             override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
                 return oldItem.id == newItem.id &&
                         oldItem.noteBody == newItem.noteBody &&
-                        oldItem.noteTitle == newItem.noteTitle
+                        oldItem.noteTitle == newItem.noteTitle &&
+                        oldItem.updatedAt == newItem.updatedAt
             }
 
             override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {

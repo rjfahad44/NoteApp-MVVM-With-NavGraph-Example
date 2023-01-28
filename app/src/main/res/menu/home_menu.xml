@@ -5,8 +5,25 @@
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_search_black_24dp"
-        android:title="Search"
+        android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/baseline_sort_24"
+        android:title="@string/sort"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/sort_default" android:title="Default" android:checked="true"/>
+                <item android:id="@+id/sort_ascending" android:title="By [A > Z]"/>
+                <item android:id="@+id/sort_descending" android:title="By [Z > A]"/>
+                <item android:id="@+id/sort_date_ascending" android:title="By Date [1 > 30]"/>
+                <item android:id="@+id/sort_date_descending" android:title="By Date [30 > 1]"/>
+            </group>
+        </menu>
+
+    </item>
 
 </menu>
