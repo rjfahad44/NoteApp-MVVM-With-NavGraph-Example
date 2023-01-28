@@ -14,10 +14,10 @@
         <action
             android:id="@+id/action_homeFragment_to_newNoteFragment"
             app:destination="@id/newNoteFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:enterAnim="@anim/side_in_up"
+            app:exitAnim="@anim/side_out_up"
+            app:popEnterAnim="@anim/side_in_up"
+            app:popExitAnim="@anim/side_out_up"/>
 
         <action
             android:id="@+id/action_homeFragment_to_updateNoteFragment"

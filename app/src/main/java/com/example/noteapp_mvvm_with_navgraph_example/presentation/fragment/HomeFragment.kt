@@ -86,8 +86,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                getSortType(requireContext())?.let { menuItem.isChecked = true }
-                menuItem.itemId.setSortType(requireContext())
+//                getSortType(requireContext())?.let { menuItem.isChecked = true }
+//                menuItem.itemId.setSortType(requireContext())
+                menuItem.isChecked = true
                 when (menuItem.itemId) {
                     R.id.sort_default -> {
                         activity?.let {

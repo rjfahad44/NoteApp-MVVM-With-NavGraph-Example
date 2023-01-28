@@ -36,13 +36,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/white"
         android:elevation="10dp"
+        app:cardElevation="10dp"
+        app:cardBackgroundColor="@color/background_white"
         app:cardCornerRadius="10dp"
         android:layout_margin="32dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -61,7 +62,7 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
