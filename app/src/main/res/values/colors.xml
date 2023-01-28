@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background_white">#EDE9E9</color>
+    <color name="background_white">#FFE8E8</color>
     <color name="hintColor">#A8A8A8</color>
     <color name="note_body_txt_color">#888888</color>
     <color name="add_note_fab_color">#FF9800</color>
