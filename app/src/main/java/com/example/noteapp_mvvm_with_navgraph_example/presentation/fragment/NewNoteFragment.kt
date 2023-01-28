@@ -26,7 +26,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
 
     private val notesViewModel by activityViewModels<NoteViewModel>()
 
-    private var selectedColor = Color.GREEN
+    private var selectedColor = Color.WHITE
 
     override fun setBinding(): FragmentNewNoteBinding =
         FragmentNewNoteBinding.inflate(layoutInflater)

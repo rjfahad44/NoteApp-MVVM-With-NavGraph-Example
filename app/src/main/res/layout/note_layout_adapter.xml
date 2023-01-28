@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardColor"
             android:layout_width="24dp"
@@ -43,6 +42,8 @@
                 android:text="@string/note_title"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
+                android:maxLines="3"
+                android:ellipsize="end"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -51,6 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:maxLines="6"
+                android:ellipsize="end"
                 android:text="@string/type_something"
                 android:textColor="@color/hintColor"
                 android:textSize="16sp" />
