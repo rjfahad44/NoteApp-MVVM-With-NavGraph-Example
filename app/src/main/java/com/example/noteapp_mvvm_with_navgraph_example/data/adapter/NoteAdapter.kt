@@ -28,7 +28,6 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
                 LayoutInflater.from(parent.context), parent, false
             )
         )
-
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {

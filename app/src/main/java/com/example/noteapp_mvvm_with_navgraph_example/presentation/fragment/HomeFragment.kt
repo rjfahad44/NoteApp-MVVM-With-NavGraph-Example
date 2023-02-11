@@ -74,7 +74,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
     private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
-                // Handle for example visibility of menu items
                 val mMenuSearch = menu.findItem(R.id.menu_search).actionView as SearchView
                 mMenuSearch.isSubmitButtonEnabled = false
                 mMenuSearch.setOnQueryTextListener(this@HomeFragment)
@@ -110,7 +109,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
 
     private fun sortNote(notes: List<Note>) {
         noteAdapter.differ.submitList(notes)
-        //updateUI(notes)
+        binding?.recyclerView?.scrollToPosition(0)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

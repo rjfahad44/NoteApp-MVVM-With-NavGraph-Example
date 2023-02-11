@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Note App</string>
+    <string name="bersyte">bersyte</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="note_title">Note title</string>
