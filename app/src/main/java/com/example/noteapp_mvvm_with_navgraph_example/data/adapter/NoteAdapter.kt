@@ -13,22 +13,14 @@ import com.example.noteapp_mvvm_with_navgraph_example.presentation.fragment.Home
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    class NoteViewHolder(val itemBinding: NoteLayoutAdapterBinding) :
-        RecyclerView.ViewHolder(itemBinding.root)
-
-    private val differCallback =
-        object : DiffUtil.ItemCallback<Note>() {
-            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return oldItem == newItem
-            }
-
-        }
+    private val differCallback = object : DiffUtil.ItemCallback<Note>() {
+        override fun areItemsTheSame(oldItem: Note, newItem: Note) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Note, newItem: Note) = oldItem == newItem
+    }
 
     val differ = AsyncListDiffer(this, differCallback)
+
+    class NoteViewHolder(val itemBinding: NoteLayoutAdapterBinding) : RecyclerView.ViewHolder(itemBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(

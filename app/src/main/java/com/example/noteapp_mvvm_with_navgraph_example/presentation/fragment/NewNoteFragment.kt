@@ -38,7 +38,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         setupMenu()
 
         binding?.apply {
-            dateTime.text = "EEEE, dd-MMM-yyyy, hh:mm:ss a".dateTimeFormat()
+            dateTime.text = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
             chooseColorMcvBtn.setCardBackgroundColor(selectedColor)
             chooseColorMcvBtn.setOnClickListener {
 
@@ -63,7 +63,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
     private fun saveNote() {
         val noteTitle = binding?.etNoteTitle?.text.toString().trim()
         val noteBody = binding?.etNoteBody?.text.toString().trim()
-        val currentDateTime = "EEEE, dd-MMM-yyyy, hh:mm:ss a".dateTimeFormat()
+        val currentDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
         if (noteTitle.isNotEmpty() && noteBody.isNotEmpty()) {
             val note = Note(0, noteTitle, noteBody, currentDateTime, currentDateTime, selectedColor)

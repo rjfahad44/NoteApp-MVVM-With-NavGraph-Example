@@ -69,7 +69,7 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
         binding?.fabDone?.setOnClickListener {
             val title = binding?.etNoteTitleUpdate?.text.toString().trim()
             val body = binding?.etNoteBodyUpdate?.text.toString().trim()
-            val updateDateTime = "EEEE, dd-MMM-yyyy, hh:mm:ss a".dateTimeFormat()
+            val updateDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
             if (title.isNotEmpty() && body.isNotEmpty()) {
                 currentNote.noteTitle = title

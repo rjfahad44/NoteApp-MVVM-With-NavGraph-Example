@@ -24,10 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryTextListener {
 
-
     private val notesViewModel by activityViewModels<NoteViewModel>()
-
     private lateinit var noteAdapter: NoteAdapter
+    private lateinit var notes: List<Note>
 
     override fun setBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
@@ -50,12 +49,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
                 2,
                 StaggeredGridLayoutManager.VERTICAL
             )
-            setHasFixedSize(true)
             adapter = noteAdapter
         }
 
         activity?.let {
             notesViewModel.allNotes().observe(it) { note ->
+                notes = note
                 noteAdapter.differ.submitList(note)
                 updateUI(note)
             }
@@ -86,58 +85,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-//                getSortType(requireContext())?.let { menuItem.isChecked = true }
-//                menuItem.itemId.setSortType(requireContext())
                 menuItem.isChecked = true
                 when (menuItem.itemId) {
                     R.id.sort_default -> {
-                        activity?.let {
-                            notesViewModel.allNotes().observe(it) { note ->
-                                noteAdapter.differ.submitList(note)
-                                updateUI(note)
-                            }
-                        }
+                        sortNote(notes)
                     }
                     R.id.sort_ascending -> {
-                        activity?.let {
-                            notesViewModel.allNotes().observe(it) { notes ->
-                                val sortedNotes = notes.sortedBy { it.noteTitle }
-                                noteAdapter.differ.submitList(sortedNotes)
-                                updateUI(sortedNotes)
-                            }
-                        }
+                        sortNote(notes.sortedBy { it.noteTitle })
                     }
                     R.id.sort_descending -> {
-                        activity?.let {
-                            notesViewModel.allNotes().observe(it) { notes ->
-                                val sortedNotes = notes.sortedByDescending { it.noteTitle }
-                                noteAdapter.differ.submitList(sortedNotes)
-                                updateUI(sortedNotes)
-                            }
-                        }
+                        sortNote(notes.sortedByDescending { it.noteTitle })
                     }
                     R.id.sort_date_ascending -> {
-                        activity?.let {
-                            notesViewModel.allNotes().observe(it) { notes ->
-                                val sortedNotes = notes.sortedBy { it.updatedAt }
-                                noteAdapter.differ.submitList(sortedNotes)
-                                updateUI(sortedNotes)
-                            }
-                        }
+                        sortNote(notes.sortedBy { it.updatedAt })
                     }
                     R.id.sort_date_descending -> {
-                        activity?.let {
-                            notesViewModel.allNotes().observe(it) { notes ->
-                                val sortedNotes = notes.sortedByDescending { it.updatedAt }
-                                noteAdapter.differ.submitList(sortedNotes)
-                                updateUI(sortedNotes)
-                            }
-                        }
+                        sortNote(notes.sortedByDescending { it.updatedAt })
                     }
                 }
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun sortNote(notes: List<Note>) {
+        noteAdapter.differ.submitList(notes)
+        //updateUI(notes)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
