@@ -65,7 +65,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         val noteBody = binding?.etNoteBody?.text.toString().trim()
         val currentDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
-        if (noteTitle.isNotEmpty() && noteBody.isNotEmpty()) {
+        if (noteTitle.isNotEmpty() || noteBody.isNotEmpty()) {
             val note = Note(0, noteTitle, noteBody, currentDateTime, currentDateTime, selectedColor)
 
             notesViewModel.addNote(note)

@@ -50,7 +50,7 @@
                         android:background="@android:color/transparent"
                         android:ems="10"
                         android:hint="@string/note_title"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textColor="@color/black"
                         android:textColorHint="@color/hintColor"
                         android:textSize="20sp"

@@ -46,7 +46,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/note_title"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/black"
                     android:textColorHint="@color/hintColor"
                     android:textSize="20sp"

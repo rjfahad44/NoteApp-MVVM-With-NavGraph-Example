@@ -109,7 +109,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
 
     private fun sortNote(notes: List<Note>) {
         noteAdapter.differ.submitList(notes)
-        binding?.recyclerView?.scrollToPosition(0)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
