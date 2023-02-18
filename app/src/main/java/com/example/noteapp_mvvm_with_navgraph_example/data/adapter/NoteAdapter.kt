@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp_mvvm_with_navgraph_example.R
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
@@ -34,7 +32,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
                 itemBinding.alertTimeDate.text = it.getDateTimeIntoLong(itemBinding.root.context)
                 itemBinding.setAlert.apply {
                     isVisible = true
-                    setImageResource(R.drawable.baseline_access_alarm_24)
+                    setImageResource(R.drawable.ic_alarm_set)
                 }
             }
 

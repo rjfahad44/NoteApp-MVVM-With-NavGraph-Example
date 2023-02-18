@@ -1,6 +1,7 @@
 package com.example.noteapp_mvvm_with_navgraph_example.presentation.fragment
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuHost
@@ -10,17 +11,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.noteapp_mvvm_with_navgraph_example.R
-import com.example.noteapp_mvvm_with_navgraph_example.data.adapter.NoteAdapter
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
+import com.example.noteapp_mvvm_with_navgraph_example.databinding.CustomeTimeAndDatePickerDialogBinding
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
-import com.example.noteapp_mvvm_with_navgraph_example.utils.dateTimeFormat
-import com.example.noteapp_mvvm_with_navgraph_example.utils.getDateTimeIntoLong
-import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
+import com.example.noteapp_mvvm_with_navgraph_example.remainder.cancelAlarm
+import com.example.noteapp_mvvm_with_navgraph_example.remainder.updateAlarm
+import com.example.noteapp_mvvm_with_navgraph_example.utils.*
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.custome_time_and_date_picker_dialog.*
 
 
 @AndroidEntryPoint
@@ -30,6 +32,8 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
 
     private val args: UpdateNoteFragmentArgs by navArgs()
     private lateinit var currentNote: Note
+    private var _dateTime: Long? = null
+    private val timeDateFormat = "EEEE, dd-MMMM-yyyy, hh:mm:ss a"
 
     override fun setBinding(): FragmentUpdateNoteBinding =
         FragmentUpdateNoteBinding.inflate(layoutInflater)
@@ -45,7 +49,7 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
 
             currentNote.time?.let {
                 alertTimeDate.text = it.getDateTimeIntoLong(requireContext())
-                setAlert.setImageResource(R.drawable.baseline_access_alarm_24)
+                setAlert.setImageResource(R.drawable.ic_alarm_set)
             }
 
             dateTime.text = currentNote.updatedAt
@@ -70,21 +74,43 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                     .show()
             }
 
+            setAlert.setOnClickListener {
+                val dialog = Dialog(requireActivity())
+                dialog.setCancelable(true)
+                dialog.setContentView(CustomeTimeAndDatePickerDialogBinding.inflate(layoutInflater).root)
+                dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+                dialog.saveButton.setOnClickListener {
+                    _dateTime = getTime(dialog)
+                    val setDateTime = _dateTime?.getDateTimeIntoLong(requireContext())
+                    setDateTime?.logI("DATE_TIME")
+                    alertTimeDate.text = setDateTime
+                    setAlert.setImageResource(R.drawable.ic_alarm_set)
+                    dialog.dismiss()
+                }
+
+                dialog.cancelButton.setOnClickListener { dialog.dismiss() }
+                dialog.show()
+            }
+
         }
 
         binding?.fabDone?.setOnClickListener {
             val title = binding?.etNoteTitleUpdate?.text.toString().trim()
             val body = binding?.etNoteBodyUpdate?.text.toString().trim()
-            val updateDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
+            val updateDateTime = timeDateFormat.dateTimeFormat()
 
             if (title.isNotEmpty() || body.isNotEmpty()) {
                 currentNote.noteTitle = title
                 currentNote.noteBody = body
                 currentNote.updatedAt = updateDateTime
+                _dateTime?.let {
+                    currentNote.time = it
+                    updateAlarm(requireContext(), it, currentNote.noteTitle, currentNote.noteBody, currentNote.requestCode)
+                }
                 notesViewModel.updateNote(currentNote)
 
                 findNavController().popBackStack()
-
             } else {
                 activity?.toast("Field is empty!")
             }
@@ -96,8 +122,8 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             setTitle("Delete Note")
             setMessage("Are you sure you want to permanently delete this note?")
             setPositiveButton("DELETE") { _, _ ->
+                cancelAlarm(requireContext(), currentNote.requestCode)
                 notesViewModel.deleteNote(currentNote)
-
                 findNavController().popBackStack()
             }
             setNegativeButton("CANCEL", null)
@@ -116,7 +142,6 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Validate and handle the selected menu item
                 when (menuItem.itemId) {
                     R.id.menu_delete -> {
                         deleteNote()

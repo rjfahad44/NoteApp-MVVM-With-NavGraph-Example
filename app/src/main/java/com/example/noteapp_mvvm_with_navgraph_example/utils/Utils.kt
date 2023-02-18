@@ -1,6 +1,7 @@
 package com.example.noteapp_mvvm_with_navgraph_example.utils
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.custome_time_and_date_picker_dialog.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -87,6 +89,18 @@ fun Long.getDateTimeIntoLong(context: Context): String{
     val dateFormat = android.text.format.DateFormat.getLongDateFormat(context).format(date)
     val timeFormat = android.text.format.DateFormat.getTimeFormat(context).format(date)
     return "$dateFormat, $timeFormat"
+}
+
+fun getTime(dialog: Dialog): Long {
+    val minute = dialog.timePicker.minute
+    val hour = dialog.timePicker.hour
+    val day = dialog.datePicker.dayOfMonth
+    val month = dialog.datePicker.month
+    val year = dialog.datePicker.year
+
+    val calendar = Calendar.getInstance()
+    calendar.set(year, month, day, hour, minute)
+    return calendar.timeInMillis
 }
 
 fun Int.setSortType(context: Context){

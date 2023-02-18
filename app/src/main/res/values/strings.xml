@@ -11,4 +11,6 @@
     <string name="date_and_time">date and time</string>
     <string name="search">Search</string>
     <string name="sort">Sort</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
 </resources>

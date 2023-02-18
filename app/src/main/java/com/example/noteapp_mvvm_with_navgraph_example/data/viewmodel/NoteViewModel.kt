@@ -13,17 +13,18 @@ class NoteViewModel @Inject constructor(private val notesRepo: NotesRepo) : View
     fun allNotes() = notesRepo.notes
 
     fun addNote(note: Note) = viewModelScope.launch {
-            notesRepo.insertNote(note)
-        }
+        notesRepo.insertNote(note)
+    }
 
     fun deleteNote(note: Note) = viewModelScope.launch {
-            notesRepo.deleteNote(note)
-        }
+        notesRepo.deleteNote(note)
+    }
 
     fun updateNote(note: Note) = viewModelScope.launch {
-            notesRepo.updateNote(note)
-        }
+        notesRepo.updateNote(note)
+    }
 
     fun searchNote(query: String?) = notesRepo.searchNote(query)
+    fun findNoteByRequestCode(requestCode: Int) = notesRepo.findNoteByRequestCode(requestCode)
 
 }

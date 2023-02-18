@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -16,21 +15,23 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewMod
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.CustomeTimeAndDatePickerDialogBinding
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentNewNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
+import com.example.noteapp_mvvm_with_navgraph_example.remainder.setAlarm
 import com.example.noteapp_mvvm_with_navgraph_example.utils.*
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.custome_time_and_date_picker_dialog.*
 import java.util.*
+import kotlin.math.absoluteValue
 
 
 @AndroidEntryPoint
 class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
 
     private val notesViewModel by activityViewModels<NoteViewModel>()
-
     private var selectedColor = Color.WHITE
     private var _dateTime: Long? = null
+    private val timeDateFormat = "EEEE, dd-MMMM-yyyy, hh:mm:ss a"
 
     override fun setBinding(): FragmentNewNoteBinding =
         FragmentNewNoteBinding.inflate(layoutInflater)
@@ -41,7 +42,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         setupMenu()
 
         binding?.apply {
-            dateTime.text = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
+            dateTime.text = timeDateFormat.dateTimeFormat()
             chooseColorMcvBtn.setCardBackgroundColor(selectedColor)
             chooseColorMcvBtn.setOnClickListener {
 
@@ -60,7 +61,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
                     .show()
             }
 
-            setAlert.setOnClickListener{
+            setAlert.setOnClickListener {
                 val dialog = Dialog(requireActivity())
                 dialog.setCancelable(true)
                 dialog.setContentView(CustomeTimeAndDatePickerDialogBinding.inflate(layoutInflater).root)
@@ -68,15 +69,10 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
 
                 dialog.saveButton.setOnClickListener {
                     _dateTime = getTime(dialog)
-
                     val setDateTime = _dateTime?.getDateTimeIntoLong(requireContext())
-
                     setDateTime?.logI("DATE_TIME")
-
                     alertTimeDate.text = setDateTime
-
-                    setAlert.setImageResource(R.drawable.baseline_access_alarm_24)
-
+                    setAlert.setImageResource(R.drawable.ic_alarm_set)
                     dialog.dismiss()
                 }
 
@@ -87,36 +83,47 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         }
     }
 
-    private fun getTime(dialog: Dialog): Long {
-        val minute = dialog.timePicker.minute
-        val hour = dialog.timePicker.hour
-        val day = dialog.datePicker.dayOfMonth
-        val month = dialog.datePicker.month
-        val year = dialog.datePicker.year
-
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day, hour, minute)
-        return calendar.timeInMillis
-    }
-
     private fun saveNote() {
         val noteTitle = binding?.etNoteTitle?.text.toString().trim()
         val noteBody = binding?.etNoteBody?.text.toString().trim()
         val currentDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
         if (noteTitle.isNotEmpty() || noteBody.isNotEmpty()) {
-            val note = Note(0, noteTitle, noteBody, currentDateTime, currentDateTime, selectedColor, _dateTime, 0, 0)
+            val requestCode = UUID.randomUUID().mostSignificantBits.absoluteValue.toInt()
+            val note = Note(
+                id = 0,
+                noteTitle = noteTitle,
+                noteBody = noteBody,
+                createdAt = currentDateTime,
+                updatedAt = currentDateTime,
+                noteColor = selectedColor,
+                time = _dateTime,
+                requestCode = requestCode,
+                alertColor = R.color.green
+            )
 
             notesViewModel.addNote(note)
 
+            "requestCode : ${requestCode}".logI("NOTEID")
+
+            _dateTime?.let {
+                setAlarm(
+                    requireContext(),
+                    it,
+                    noteTitle,
+                    noteBody,
+                    requestCode
+                )
+            }
+
             findNavController().popBackStack()
-
             binding?.root?.let { "Note saved successfully".snackBar(it) }
-
         } else {
             "Empty Note".toast(requireActivity())
         }
     }
+
+
 
     private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
@@ -129,7 +136,6 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                // Validate and handle the selected menu item
                 when (menuItem.itemId) {
                     R.id.menu_save -> {
                         saveNote()

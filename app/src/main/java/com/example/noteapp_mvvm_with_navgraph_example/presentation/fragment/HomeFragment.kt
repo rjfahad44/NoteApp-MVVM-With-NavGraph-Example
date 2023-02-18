@@ -122,7 +122,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
         return true
     }
 
-
     private fun searchNote(query: String?) {
         val searchQuery = "%$query%"
         notesViewModel.searchNote(searchQuery).observe(this) { notes ->
