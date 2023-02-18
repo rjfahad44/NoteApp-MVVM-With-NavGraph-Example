@@ -6,6 +6,7 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -79,6 +80,13 @@ fun String.dateTimeFormat(): String{
         val date: String = simpleDateFormat.format(Date())
         date
     }
+}
+
+fun Long.getDateTimeIntoLong(context: Context): String{
+    val date = Date(this)
+    val dateFormat = android.text.format.DateFormat.getLongDateFormat(context).format(date)
+    val timeFormat = android.text.format.DateFormat.getTimeFormat(context).format(date)
+    return "$dateFormat, $timeFormat"
 }
 
 fun Int.setSortType(context: Context){

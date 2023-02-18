@@ -55,7 +55,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
         activity?.let {
             notesViewModel.allNotes().observe(it) { note ->
                 notes = note
-                noteAdapter.differ.submitList(note)
+                noteAdapter.setData(note as ArrayList<Note>)
                 updateUI(note)
             }
         }
@@ -108,7 +108,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
     }
 
     private fun sortNote(notes: List<Note>) {
-        noteAdapter.differ.submitList(notes)
+        noteAdapter.setData(ArrayList(notes))
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -125,8 +125,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
 
     private fun searchNote(query: String?) {
         val searchQuery = "%$query%"
-        notesViewModel.searchNote(searchQuery).observe(this) { list ->
-            noteAdapter.differ.submitList(list)
+        notesViewModel.searchNote(searchQuery).observe(this) { notes ->
+            noteAdapter.setData(notes as ArrayList<Note>)
         }
     }
 }

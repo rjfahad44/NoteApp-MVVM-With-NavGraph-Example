@@ -12,6 +12,10 @@
     <color name="note_body_txt_color">#888888</color>
     <color name="add_note_fab_color">#FF9800</color>
     <color name="update_note_fab_color">#FF8181</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#13CF1B</color>
+    <color name="blue">#0027FF</color>
+    <color name="gray">#6C213B</color>
 
 
 </resources>

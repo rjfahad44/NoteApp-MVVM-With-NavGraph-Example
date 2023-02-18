@@ -1,5 +1,6 @@
 package com.example.noteapp_mvvm_with_navgraph_example.presentation.fragment
 
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
@@ -12,14 +13,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.noteapp_mvvm_with_navgraph_example.R
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
+import com.example.noteapp_mvvm_with_navgraph_example.databinding.CustomeTimeAndDatePickerDialogBinding
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentNewNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
-import com.example.noteapp_mvvm_with_navgraph_example.utils.dateTimeFormat
-import com.example.noteapp_mvvm_with_navgraph_example.utils.snackBar
-import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
+import com.example.noteapp_mvvm_with_navgraph_example.utils.*
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.custome_time_and_date_picker_dialog.*
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -28,6 +30,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
     private val notesViewModel by activityViewModels<NoteViewModel>()
 
     private var selectedColor = Color.WHITE
+    private var _dateTime: Long? = null
 
     override fun setBinding(): FragmentNewNoteBinding =
         FragmentNewNoteBinding.inflate(layoutInflater)
@@ -57,7 +60,43 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
                     .show()
             }
 
+            setAlert.setOnClickListener{
+                val dialog = Dialog(requireActivity())
+                dialog.setCancelable(true)
+                dialog.setContentView(CustomeTimeAndDatePickerDialogBinding.inflate(layoutInflater).root)
+                dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+                dialog.saveButton.setOnClickListener {
+                    _dateTime = getTime(dialog)
+
+                    val setDateTime = _dateTime?.getDateTimeIntoLong(requireContext())
+
+                    setDateTime?.logI("DATE_TIME")
+
+                    alertTimeDate.text = setDateTime
+
+                    setAlert.setImageResource(R.drawable.baseline_access_alarm_24)
+
+                    dialog.dismiss()
+                }
+
+                dialog.cancelButton.setOnClickListener { dialog.dismiss() }
+                dialog.show()
+            }
+
         }
+    }
+
+    private fun getTime(dialog: Dialog): Long {
+        val minute = dialog.timePicker.minute
+        val hour = dialog.timePicker.hour
+        val day = dialog.datePicker.dayOfMonth
+        val month = dialog.datePicker.month
+        val year = dialog.datePicker.year
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day, hour, minute)
+        return calendar.timeInMillis
     }
 
     private fun saveNote() {
@@ -66,7 +105,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
         val currentDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
 
         if (noteTitle.isNotEmpty() || noteBody.isNotEmpty()) {
-            val note = Note(0, noteTitle, noteBody, currentDateTime, currentDateTime, selectedColor)
+            val note = Note(0, noteTitle, noteBody, currentDateTime, currentDateTime, selectedColor, _dateTime, 0, 0)
 
             notesViewModel.addNote(note)
 

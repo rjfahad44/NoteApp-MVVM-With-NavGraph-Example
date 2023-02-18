@@ -15,4 +15,7 @@ data class Note(
     var createdAt: String?,
     var updatedAt: String?,
     var noteColor: Int,
+    var time: Long? = null,
+    var requestCode: Int,
+    var alertColor: Int
 ) : Parcelable

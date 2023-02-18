@@ -35,6 +35,41 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/chooseColorMcvBtn"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="@color/black"
+                        app:cardCornerRadius="50dp"/>
+
+                    <TextView
+                        android:id="@+id/alertTimeDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@+id/setAlert"
+                        android:layout_centerVertical="true"
+                        android:maxLines="1"
+                        android:textColor="@color/note_body_txt_color"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/setAlert"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_add_alarm_24"
+                        />
+
+                </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,17 +91,6 @@
                         android:textSize="20sp"
                         android:textStyle="bold"
                         tools:ignore="TouchTargetSizeCheck" />
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/chooseColorMcvBtn"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        app:cardCornerRadius="50dp"
-                        app:cardElevation="3dp"
-                        android:elevation="3dp"
-                        android:translationZ="3dp"
-                        android:layout_margin="5dp"
-                        app:cardBackgroundColor="@color/black"/>
 
                 </LinearLayout>
 

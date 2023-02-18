@@ -1,26 +1,48 @@
 package com.example.noteapp_mvvm_with_navgraph_example.data.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.noteapp_mvvm_with_navgraph_example.R
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.NoteLayoutAdapterBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.fragment.HomeFragmentDirections
+import com.example.noteapp_mvvm_with_navgraph_example.utils.getDateTimeIntoLong
 
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<Note>() {
-        override fun areItemsTheSame(oldItem: Note, newItem: Note) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Note, newItem: Note) = oldItem == newItem
+    private var list = ArrayList<Note>()
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(newNotes: ArrayList<Note>) {
+        list = newNotes
+        notifyDataSetChanged()
     }
+    class NoteViewHolder( private val itemBinding: NoteLayoutAdapterBinding) : RecyclerView.ViewHolder(itemBinding.root){
+        fun bind(note: Note){
+            itemBinding.tvNoteTitle.text = note.noteTitle
+            itemBinding.tvNoteBody.text = note.noteBody
+            itemBinding.dateTime.text = note.updatedAt
+            itemBinding.cardColor.setCardBackgroundColor(note.noteColor)
 
-    val differ = AsyncListDiffer(this, differCallback)
+            note.time?.let {
+                itemBinding.alertTimeDate.text = it.getDateTimeIntoLong(itemBinding.root.context)
+                itemBinding.setAlert.apply {
+                    isVisible = true
+                    setImageResource(R.drawable.baseline_access_alarm_24)
+                }
+            }
 
-    class NoteViewHolder(val itemBinding: NoteLayoutAdapterBinding) : RecyclerView.ViewHolder(itemBinding.root)
+            itemView.setOnClickListener { view ->
+                view.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(note))
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
@@ -31,23 +53,9 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        val currentNote = differ.currentList[position]
-
-        holder.itemBinding.tvNoteTitle.text = currentNote.noteTitle
-        holder.itemBinding.tvNoteBody.text = currentNote.noteBody
-        holder.itemBinding.dateTime.text = currentNote.updatedAt
-
-        //Generate Random Color//
-        //val random = Random()
-        //val randomColor = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
-
-        holder.itemBinding.cardColor.setCardBackgroundColor(currentNote.noteColor)
-
-        holder.itemView.setOnClickListener { view ->
-            view.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote))
-        }
+        holder.bind(list[position])
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = list.size
 
 }

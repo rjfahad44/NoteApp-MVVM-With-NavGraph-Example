@@ -16,6 +16,7 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewMod
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
 import com.example.noteapp_mvvm_with_navgraph_example.utils.dateTimeFormat
+import com.example.noteapp_mvvm_with_navgraph_example.utils.getDateTimeIntoLong
 import com.example.noteapp_mvvm_with_navgraph_example.utils.toast
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -41,6 +42,11 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
         currentNote = args.note!!
 
         binding?.apply {
+
+            currentNote.time?.let {
+                alertTimeDate.text = it.getDateTimeIntoLong(requireContext())
+                setAlert.setImageResource(R.drawable.baseline_access_alarm_24)
+            }
 
             dateTime.text = currentNote.updatedAt
             etNoteBodyUpdate.setText(currentNote.noteBody)
