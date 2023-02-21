@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,7 @@ import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.custome_time_and_date_picker_dialog.*
+import kotlinx.android.synthetic.main.fragment_update_note.*
 
 
 @AndroidEntryPoint
@@ -78,6 +80,8 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                     .show()
             }
 
+            updateAlertIconTint(currentNote.alertStatus)
+
             setAlert.setOnClickListener {
                 val dialog = Dialog(requireActivity())
                 dialog.setCancelable(true)
@@ -89,7 +93,9 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                     val setDateTime = _dateTime?.getDateTimeIntoLong(requireContext())
                     setDateTime?.logI("DATE_TIME")
                     alertTimeDate.text = setDateTime
-                    setAlert.setImageResource(R.drawable.ic_alarm_set)
+                    currentNote.alertStatus = 1
+                    updateAlertIconTint(currentNote.alertStatus)
+                    //setAlert.setImageResource(R.drawable.ic_alarm_set)
                     dialog.dismiss()
                 }
 
@@ -117,6 +123,31 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                 findNavController().popBackStack()
             } else {
                 activity?.toast("Field is empty!")
+            }
+        }
+    }
+
+    private fun updateAlertIconTint(alertStatus: Int) {
+        when (alertStatus) {
+            0 -> {
+                setAlert.apply {
+                    setImageResource(R.drawable.baseline_add_alarm_24)
+                    imageTintList = resources.getColorStateList(R.color.black, null)
+                }
+            }
+            1 -> {
+                setAlert.apply {
+                    isVisible = true
+                    setImageResource(R.drawable.ic_alarm_set)
+                    imageTintList = resources.getColorStateList(R.color.green, null)
+                }
+            }
+            2 -> {
+                setAlert.apply {
+                    isVisible = true
+                    setImageResource(R.drawable.ic_alarm_set)
+                    imageTintList = resources.getColorStateList(R.color.orange, null)
+                }
             }
         }
     }

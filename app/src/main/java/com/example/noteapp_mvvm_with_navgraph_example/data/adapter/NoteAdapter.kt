@@ -1,6 +1,7 @@
 package com.example.noteapp_mvvm_with_navgraph_example.data.adapter
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -29,11 +30,26 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
             itemBinding.cardColor.setCardBackgroundColor(note.noteColor)
 
 
-            note.time?.let {
-                itemBinding.alertTimeDate.text = it.getDateTimeIntoLong(itemBinding.root.context)
-                itemBinding.setAlert.apply {
-                    isVisible = true
-                    setImageResource(R.drawable.ic_alarm_set)
+            when (note.alertStatus) {
+                0 -> {
+                    itemBinding.alertTimeDate.text = note.time?.getDateTimeIntoLong(itemBinding.root.context)
+                    itemBinding.setAlert.apply { isVisible = false }
+                }
+                1 -> {
+                    itemBinding.alertTimeDate.text = note.time?.getDateTimeIntoLong(itemBinding.root.context)
+                    itemBinding.setAlert.apply {
+                        isVisible = true
+                        setImageResource(R.drawable.ic_alarm_set)
+                        imageTintList = resources.getColorStateList(R.color.green, null)
+                    }
+                }
+                2 -> {
+                    itemBinding.alertTimeDate.text = note.time?.getDateTimeIntoLong(itemBinding.root.context)
+                    itemBinding.setAlert.apply {
+                        isVisible = true
+                        setImageResource(R.drawable.ic_alarm_set)
+                        imageTintList = resources.getColorStateList(R.color.orange, null)
+                    }
                 }
             }
 
