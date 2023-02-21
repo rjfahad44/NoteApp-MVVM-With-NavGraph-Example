@@ -55,7 +55,6 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
         binding?.apply {
             currentNote.time?.let {
                 alertTimeDate.text = it.getDateTimeIntoLong(requireContext())
-                setAlert.setImageResource(R.drawable.ic_alarm_set)
             }
 
             dateTime.text = currentNote.updatedAt
@@ -95,7 +94,6 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                     alertTimeDate.text = setDateTime
                     currentNote.alertStatus = 1
                     updateAlertIconTint(currentNote.alertStatus)
-                    //setAlert.setImageResource(R.drawable.ic_alarm_set)
                     dialog.dismiss()
                 }
 
@@ -137,14 +135,12 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             }
             1 -> {
                 setAlert.apply {
-                    isVisible = true
                     setImageResource(R.drawable.ic_alarm_set)
                     imageTintList = resources.getColorStateList(R.color.green, null)
                 }
             }
             2 -> {
                 setAlert.apply {
-                    isVisible = true
                     setImageResource(R.drawable.ic_alarm_set)
                     imageTintList = resources.getColorStateList(R.color.orange, null)
                 }
