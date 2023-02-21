@@ -9,6 +9,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.noteapp_mvvm_with_navgraph_example.Constants.timeDateFormat
 import com.example.noteapp_mvvm_with_navgraph_example.R
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
@@ -31,7 +32,6 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
     private val notesViewModel by activityViewModels<NoteViewModel>()
     private var selectedColor = Color.WHITE
     private var _dateTime: Long? = null
-    private val timeDateFormat = "EEEE, dd-MMMM-yyyy, hh:mm:ss a"
 
     override fun setBinding(): FragmentNewNoteBinding =
         FragmentNewNoteBinding.inflate(layoutInflater)
@@ -99,21 +99,22 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
                 noteColor = selectedColor,
                 time = _dateTime,
                 requestCode = requestCode,
-                alertColor = R.color.green
+                alertColor = R.color.green,
+                alertStatus = if (_dateTime !=null) 1 else 0
             )
 
             notesViewModel.addNote(note)
 
-            "requestCode : ${requestCode}".logI("NOTEID")
-
-            _dateTime?.let {
-                setAlarm(
-                    requireContext(),
-                    it,
-                    noteTitle,
-                    noteBody,
-                    requestCode
-                )
+            if (_dateTime !=null){
+                _dateTime?.let {
+                    setAlarm(
+                        requireContext(),
+                        it,
+                        noteTitle,
+                        noteBody,
+                        requestCode
+                    )
+                }
             }
 
             findNavController().popBackStack()

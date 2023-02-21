@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.noteapp_mvvm_with_navgraph_example.Constants.timeDateFormat
 import com.example.noteapp_mvvm_with_navgraph_example.R
 import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
@@ -33,7 +34,7 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
     private val args: UpdateNoteFragmentArgs by navArgs()
     private lateinit var currentNote: Note
     private var _dateTime: Long? = null
-    private val timeDateFormat = "EEEE, dd-MMMM-yyyy, hh:mm:ss a"
+
 
     override fun setBinding(): FragmentUpdateNoteBinding =
         FragmentUpdateNoteBinding.inflate(layoutInflater)
@@ -43,10 +44,13 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
 
         setupMenu()
 
-        currentNote = args.note!!
+        if (args.note == null) {
+            findNavController().popBackStack()
+            return
+        }
+        args.note?.let { currentNote = it }
 
         binding?.apply {
-
             currentNote.time?.let {
                 alertTimeDate.text = it.getDateTimeIntoLong(requireContext())
                 setAlert.setImageResource(R.drawable.ic_alarm_set)

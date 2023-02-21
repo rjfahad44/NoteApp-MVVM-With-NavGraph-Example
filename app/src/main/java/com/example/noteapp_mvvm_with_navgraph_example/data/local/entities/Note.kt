@@ -16,6 +16,7 @@ data class Note(
     var updatedAt: String?,
     var noteColor: Int,
     var time: Long? = null,
-    var requestCode: Int,
-    var alertColor: Int
+    var requestCode: Int = 0,
+    var alertColor: Int,
+    var alertStatus: Int = 0 //0 = not set, 1 = set, 2 = alert time is gone => and set the alertColor on alertStatus bases//
 ) : Parcelable

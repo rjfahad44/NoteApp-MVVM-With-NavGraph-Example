@@ -28,6 +28,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
             itemBinding.dateTime.text = note.updatedAt
             itemBinding.cardColor.setCardBackgroundColor(note.noteColor)
 
+
             note.time?.let {
                 itemBinding.alertTimeDate.text = it.getDateTimeIntoLong(itemBinding.root.context)
                 itemBinding.setAlert.apply {

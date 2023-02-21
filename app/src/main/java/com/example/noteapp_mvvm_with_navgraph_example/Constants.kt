@@ -6,4 +6,5 @@ object Constants {
     const val channelID = "note_remainder_app"
     const val titleExtra = "title"
     const val messageExtra = "message"
+    const val timeDateFormat = "EEEE, dd-MMMM-yyyy, hh:mm:ss a"
 }
