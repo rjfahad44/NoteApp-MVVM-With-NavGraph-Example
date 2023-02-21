@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
@@ -89,11 +88,12 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
 
                 dialog.saveButton.setOnClickListener {
                     _dateTime = getTime(dialog)
+
                     val setDateTime = _dateTime?.getDateTimeIntoLong(requireContext())
-                    setDateTime?.logI("DATE_TIME")
                     alertTimeDate.text = setDateTime
                     currentNote.alertStatus = 1
                     updateAlertIconTint(currentNote.alertStatus)
+
                     dialog.dismiss()
                 }
 

@@ -40,19 +40,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val requestCode = intent.getIntExtra(notificationId, -1)
 
         if (requestCode >= 1) {
-            "call intent 1".logI("INTENT_CALL")
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(requestCode)
             lifecycleScope.launch {
-                notesViewModel.findNoteByRequestCode(requestCode).collectLatest {
-                    it.alertStatus = 2
-                    notesViewModel.updateNote(it)
-                }
-                "call intent 2".logI("INTENT_CALL")
                 notesViewModel.findNoteByRequestCode(requestCode).collectLatest { note ->
-                    "call intent 3 $requestCode".logI("INTENT_CALL")
-                    binding.fragmentHost.findNavController()
-                        .navigate(HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(note))
+                    "call intent $requestCode".logI("INTENT_CALL")
+                    note.alertStatus = 2
+                    notesViewModel.updateNote(note)
+                    binding.fragmentHost.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(note))
                 }
             }
         }

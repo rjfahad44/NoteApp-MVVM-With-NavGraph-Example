@@ -6,23 +6,29 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.noteapp_mvvm_with_navgraph_example.Constants.channelID
 import com.example.noteapp_mvvm_with_navgraph_example.Constants.messageExtra
 import com.example.noteapp_mvvm_with_navgraph_example.Constants.notificationId
 import com.example.noteapp_mvvm_with_navgraph_example.Constants.titleExtra
 import com.example.noteapp_mvvm_with_navgraph_example.R
-import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
+import com.example.noteapp_mvvm_with_navgraph_example.data.local.NotesDataBase
+import com.example.noteapp_mvvm_with_navgraph_example.data.local.dao.NoteDao
+import com.example.noteapp_mvvm_with_navgraph_example.data.repo.NotesRepo
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.activity.MainActivity
+import com.example.noteapp_mvvm_with_navgraph_example.utils.logI
+import dagger.hilt.InstallIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class NotificationRemainder : BroadcastReceiver() {
+
     override fun onReceive(context: Context, intent: Intent) {
         val notificationID = intent.getIntExtra(notificationId, -1)
+
         pushNotificationWithNotify(context, intent, notificationID)
     }
 

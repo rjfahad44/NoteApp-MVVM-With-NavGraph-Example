@@ -86,7 +86,7 @@ class NewNoteFragment : BaseFragment<FragmentNewNoteBinding>() {
     private fun saveNote() {
         val noteTitle = binding?.etNoteTitle?.text.toString().trim()
         val noteBody = binding?.etNoteBody?.text.toString().trim()
-        val currentDateTime = "EEEE, dd-MMMM-yyyy, hh:mm:ss a".dateTimeFormat()
+        val currentDateTime = timeDateFormat.dateTimeFormat()
 
         if (noteTitle.isNotEmpty() || noteBody.isNotEmpty()) {
             val requestCode = UUID.randomUUID().mostSignificantBits.absoluteValue.toInt()

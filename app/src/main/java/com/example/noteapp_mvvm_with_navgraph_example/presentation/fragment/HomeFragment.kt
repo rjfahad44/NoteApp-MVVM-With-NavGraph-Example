@@ -8,7 +8,10 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp_mvvm_with_navgraph_example.R
 import com.example.noteapp_mvvm_with_navgraph_example.data.adapter.NoteAdapter
@@ -16,9 +19,9 @@ import com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note
 import com.example.noteapp_mvvm_with_navgraph_example.data.viewmodel.NoteViewModel
 import com.example.noteapp_mvvm_with_navgraph_example.databinding.FragmentHomeBinding
 import com.example.noteapp_mvvm_with_navgraph_example.presentation.base.BaseFragment
-import com.example.noteapp_mvvm_with_navgraph_example.utils.getSortType
-import com.example.noteapp_mvvm_with_navgraph_example.utils.setSortType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -27,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
     private val notesViewModel by activityViewModels<NoteViewModel>()
     private lateinit var noteAdapter: NoteAdapter
     private lateinit var notes: List<Note>
+    private lateinit var staggerGridlayoutManager: StaggeredGridLayoutManager
 
     override fun setBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
@@ -43,20 +47,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
 
     private fun setUpRecyclerView() {
         noteAdapter = NoteAdapter()
+        staggerGridlayoutManager = StaggeredGridLayoutManager(
+            2,
+            StaggeredGridLayoutManager.VERTICAL
+        )
 
         binding?.recyclerView?.apply {
-            layoutManager = StaggeredGridLayoutManager(
-                2,
-                StaggeredGridLayoutManager.VERTICAL
-            )
+             layoutManager = staggerGridlayoutManager
+            //layoutManager = LinearLayoutManager(requireContext())
             adapter = noteAdapter
         }
 
         activity?.let {
-            notesViewModel.allNotes().observe(it) { note ->
-                notes = note
-                noteAdapter.setData(note as ArrayList<Note>)
-                updateUI(note)
+            notesViewModel.allNotes().observe(it) { noteList ->
+                notes = noteList
+                noteAdapter.submitList(noteList)
+                updateUI(noteList)
             }
         }
     }
@@ -108,7 +114,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
     }
 
     private fun sortNote(notes: List<Note>) {
-        noteAdapter.setData(ArrayList(notes))
+        //noteAdapter.setData(ArrayList(notes))
+        noteAdapter.submitList(notes)
+        lifecycleScope.launch {
+            delay(500)
+            binding?.recyclerView?.smoothScrollToPosition(0)
+        }
+
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -125,7 +137,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SearchView.OnQueryText
     private fun searchNote(query: String?) {
         val searchQuery = "%$query%"
         notesViewModel.searchNote(searchQuery).observe(this) { notes ->
-            noteAdapter.setData(notes as ArrayList<Note>)
+            noteAdapter.submitList(notes as ArrayList<Note>)
         }
     }
 }

@@ -20,5 +20,6 @@ object MainModule {
         Room.databaseBuilder(context, NotesDataBase::class.java, "notes.db").build()
 
     @Provides
+    @Singleton
     fun providesNotesDao(dataBase: NotesDataBase) = dataBase.noteDao()
 }
