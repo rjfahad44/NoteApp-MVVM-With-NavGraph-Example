@@ -48,6 +48,10 @@
             app:argType="com.example.noteapp_mvvm_with_navgraph_example.data.local.entities.Note"
             app:nullable="true" />
 
+        <argument
+            android:name="isAlert"
+            android:defaultValue="false"/>
+
     </fragment>
 
 </navigation>

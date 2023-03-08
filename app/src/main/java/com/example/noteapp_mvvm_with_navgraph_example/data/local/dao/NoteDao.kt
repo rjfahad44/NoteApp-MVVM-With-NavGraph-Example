@@ -25,6 +25,6 @@ interface NoteDao {
     @Query("SELECT * FROM NOTES WHERE noteTitle LIKE :query OR noteBody LIKE:query")
     fun searchNote(query: String?): LiveData<List<Note>>
 
-    @Query("SELECT * FROM NOTES WHERE requestCode =:requestCode")
+    @Query("SELECT * FROM NOTES WHERE requestCode = :requestCode LIMIT 1")
     fun findNoteByRequestCode(requestCode: Int): Flow<Note>
 }

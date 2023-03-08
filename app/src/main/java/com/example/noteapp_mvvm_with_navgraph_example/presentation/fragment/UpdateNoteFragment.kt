@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.*
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -49,7 +50,11 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
             findNavController().popBackStack()
             return
         }
-        args.note?.let { currentNote = it }
+
+        args.note?.let {
+            currentNote = it
+            if (args.isAlert) NotificationManagerCompat.from(requireContext()).cancel(it.requestCode)
+        }
 
         binding?.apply {
             currentNote.time?.let {
@@ -112,10 +117,17 @@ class UpdateNoteFragment : BaseFragment<FragmentUpdateNoteBinding>() {
                 currentNote.noteTitle = title
                 currentNote.noteBody = body
                 currentNote.updatedAt = updateDateTime
-                _dateTime?.let {
-                    currentNote.time = it
-                    updateAlarm(requireContext(), it, currentNote.noteTitle, currentNote.noteBody, currentNote.requestCode)
+                currentNote.time = _dateTime
+
+                if (_dateTime != null) {
+                    updateAlarm(
+                        requireContext(),
+                        currentNote.time!!,
+                        currentNote.noteTitle,
+                        currentNote.noteBody,
+                        currentNote.requestCode)
                 }
+
                 notesViewModel.updateNote(currentNote)
 
                 findNavController().popBackStack()
