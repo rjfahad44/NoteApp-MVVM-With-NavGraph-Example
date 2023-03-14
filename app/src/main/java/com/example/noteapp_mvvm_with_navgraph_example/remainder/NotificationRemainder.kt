@@ -33,12 +33,12 @@ class NotificationRemainder : BroadcastReceiver() {
     lateinit var notesRepo: NotesRepo
 
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationID = intent.getIntExtra(notificationId, -1) ?:-1
+        val notificationID = intent.getIntExtra(notificationId, -1)
 
         var note: Note? = null
 
         val job = CoroutineScope(Dispatchers.IO).launch {
-            notesRepo.findNoteByRequestCode(notificationID).collectLatest {
+            notesRepo.findNoteByRequestCode(notificationID)?.collectLatest {
                 if (isActive){
                     "Note $it".logI("NOTE_MODEL")
                     it.alertStatus = 2
@@ -48,7 +48,7 @@ class NotificationRemainder : BroadcastReceiver() {
                 }
             }
         }
-        job.cancel()
+//        job.cancel()
     }
 
     private fun pushNotificationWithNotify(

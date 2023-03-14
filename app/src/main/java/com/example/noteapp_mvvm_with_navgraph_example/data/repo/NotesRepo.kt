@@ -13,13 +13,10 @@ class NotesRepo @Inject constructor(private val notesDao: NoteDao) {
     suspend fun deleteNote(note: Note) = notesDao.deleteNote(note)
     suspend fun updateNote(note: Note) = notesDao.updateNote(note)
     fun searchNote(query: String?) = notesDao.searchNote(query)
-    fun findNoteByRequestCode(requestCode: Int?) = flow<
-            Note> {
-        requestCode?.let {
-            notesDao.findNoteByRequestCode(
-                it
-            )
-        }
+    fun findNoteByRequestCode(requestCode: Int?) = requestCode?.let {
+        notesDao.findNoteByRequestCode(
+            it
+        )
     }
 }
 

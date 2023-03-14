@@ -27,5 +27,5 @@ interface NoteDao {
     fun searchNote(query: String?): LiveData<List<Note>>
 
     @Query("SELECT * FROM NOTES WHERE requestCode =:requestCode")
-    fun findNoteByRequestCode(requestCode: Int): Note
+    fun findNoteByRequestCode(requestCode: Int): Flow<Note>
 }
