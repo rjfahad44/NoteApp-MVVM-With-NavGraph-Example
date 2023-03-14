@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,20 +33,22 @@ class NotificationRemainder : BroadcastReceiver() {
     lateinit var notesRepo: NotesRepo
 
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationID = intent.getIntExtra(notificationId, -1)
+        val notificationID = intent.getIntExtra(notificationId, -1) ?:-1
 
         var note: Note? = null
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val job = CoroutineScope(Dispatchers.IO).launch {
             notesRepo.findNoteByRequestCode(notificationID).collectLatest {
-                "Note $it".logI("NOTE_MODEL")
-                it.alertStatus = 2
-                note = it
-                notesRepo.updateNote(it)
-               pushNotificationWithNotify(context, intent, notificationID, it)
+                if (isActive){
+                    "Note $it".logI("NOTE_MODEL")
+                    it.alertStatus = 2
+                    note = it
+                    notesRepo.updateNote(it)
+                    pushNotificationWithNotify(context, intent, notificationID, it)
+                }
             }
         }
-
+        job.cancel()
     }
 
     private fun pushNotificationWithNotify(
